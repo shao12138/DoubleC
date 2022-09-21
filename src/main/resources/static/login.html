@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./css/xadmin.css">
     <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -45,9 +46,31 @@
                 ]
             });
             form.on('submit(login)', function (data) {
-                // alert(888)
-                layer.msg(JSON.stringify(data.field), function () {
-                    location.href = 'index.html'
+                $.ajax({
+                    type: "POST",
+                    url: "/login",
+                    data: {userInfo: JSON.stringify(data['field'])},
+                    datatype: "json",
+                    success: function (data) {
+                        //4：锁
+                        if (data == "none") {
+                            layer.alert("账户不存在!", {icon: 0}, function () {
+                                location.href = 'login.html'
+                            });
+                        } else if (data == "fail") {
+                            layer.alert("密码错误!", {icon: 2}, function () {
+                                location.href = 'login.html'
+                            });
+                        } else if (data == "success") {
+                            layer.alert("登录成功!", {icon: 1}, function () {
+                                location.href = 'index.html'
+                            });
+                        } else if (data == "online") {
+                            layer.alert("请勿重复登录!", {icon: 4}, function () {
+                                location.href = 'index.html'
+                            });
+                        }
+                    },
                 });
                 return false;
             });

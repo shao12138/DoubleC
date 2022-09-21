@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 //实现HandlerInterceptor接口实现拦截器
 public class LoginInterceptor implements HandlerInterceptor {
     // 定义该拦截器直接放行的请求：/login
-    private static final String[] IGNORE_URIS = {"/login.html","/login"};
+    private static final String[] IGNORE_URIS = {"/login.html", "/login", "/logout.html"};
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 获取请求的路径进行判断

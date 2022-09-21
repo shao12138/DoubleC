@@ -4,7 +4,7 @@ package com.ysy.doublec.Pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "member")
 public class User {
     @Id
     @Column(name = "id")

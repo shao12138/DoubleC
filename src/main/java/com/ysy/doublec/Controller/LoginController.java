@@ -14,23 +14,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@ResponseBody
 public class LoginController {
     @Autowired
     private LoginService loginService;
 
     @RequestMapping("/login")
+    @ResponseBody
     public String login(HttpServletRequest request, String userInfo) {
         User user = JSON.parseObject(userInfo, User.class);
-        String result = loginService.login(user.getUsername(), user.getPassword());
-        if (result.equals("success")) {
-            //存放Session
-            HttpSession session = request.getSession();
-            if (session.getAttribute("username") != null) {
-                result = "online";
+        String result = "";
+        if (user == null) {
+            result = "非法操作！！！";
+        } else {
+            result = loginService.login(user.getUsername(), user.getPassword());
+            if (result.equals("success")) {
+                //存放Session
+                HttpSession session = request.getSession();
+                if (session.getAttribute("username") != null) {
+                    result = "online";
+                }
+                session.setAttribute("username", user.getUsername());
             }
-            session.setAttribute("username", user.getUsername());
         }
         return result;
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return "/logout.html";
     }
 }

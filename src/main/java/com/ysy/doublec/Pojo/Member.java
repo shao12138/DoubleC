@@ -3,14 +3,13 @@ package com.ysy.doublec.Pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "members")
 public class Member {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String number;
     private String password;
     private String sex;
     private int age;
@@ -23,10 +22,9 @@ public class Member {
     public Member() {
     }
 
-    public Member(Integer id, String name, String number, String password, String sex, int age, String tell, String idcard, String address, String trust, String content) {
+    public Member(Integer id, String name, String number,  String sex, int age, String tell, String idcard, String address, String trust, String content) {
         this.id = id;
         this.name = name;
-        this.number = number;
         this.password = password;
         this.sex = sex;
         this.age = age;
@@ -51,14 +49,6 @@ public class Member {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
     }
 
     public String getPassword() {

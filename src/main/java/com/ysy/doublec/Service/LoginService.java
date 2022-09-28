@@ -12,9 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 public class LoginService {
     @Autowired
     UserDao userDao;
-    @Autowired
-    RedisTool redisTool;
-
     public String login(String username, String password) {
         User user = userDao.findByUsername(username);
         if (user == null) {

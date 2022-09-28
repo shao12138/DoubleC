@@ -9,6 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class InterceptorConfig implements WebMvcConfigurer {
     @Override   //拦截器配置
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LoginInterceptor());
+        registry.addInterceptor(new LoginInterceptor()).excludePathPatterns("/css/**","/fonts/**","/js/**","/images/**","/lib/**");
     }
 }

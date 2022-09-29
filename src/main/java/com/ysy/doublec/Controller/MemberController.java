@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 @Controller
@@ -55,5 +52,12 @@ public class MemberController {
         }
         Member member = JSON.parseObject(memberInfo, Member.class);
         return memberService.editMember(member);
+    }
+
+    @RequestMapping("/delMembers")
+    @ResponseBody
+    public void delMembers(String ids) {
+        String[] deleteIds = ids.split(",");
+        memberService.delMember(deleteIds);
     }
 }

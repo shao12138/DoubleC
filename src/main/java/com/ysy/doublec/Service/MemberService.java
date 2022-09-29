@@ -38,4 +38,8 @@ public class MemberService {
         memberDao.editMember(member);
         return "success";
     }
+
+    public void delMember(String[] deleteIds) {
+        memberDao.delMember(deleteIds);
+    }
 }

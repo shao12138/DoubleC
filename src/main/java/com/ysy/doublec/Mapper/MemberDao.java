@@ -28,4 +28,6 @@ public interface MemberDao {
     @Update("update members set address=#{address},age=#{age},content=#{content},idcard=#{idcard},name=#{name}," +
             "trust=#{trust},password=#{password},sex=#{sex} where tell=#{tell}")
     void editMember(Member member);
+
+    void delMember(@Param("deleteIds") String[] deleteIds);
 }

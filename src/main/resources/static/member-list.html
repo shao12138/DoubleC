@@ -108,7 +108,8 @@
                             class="layui-icon"></i>添加
                     </button>
                     <div class="layui-inline layui-show-xs-block">
-                        <input type="text" name="username" placeholder="请输入电话号查询" autocomplete="off" class="layui-input">
+                        <input type="text" name="username" placeholder="请输入电话号查询" autocomplete="off"
+                               class="layui-input">
                     </div>
                     <div class="layui-inline layui-show-xs-block">
                         <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
@@ -175,7 +176,7 @@
     });
 
     function member_edit(obj, id) {
-        xadmin.open('编辑信息', 'member-edit.html?id='+id, 600, 720)
+        xadmin.open('编辑信息', 'member-edit.html?id=' + id, 600, 720)
     }
 
     function delAll(argument) {
@@ -186,8 +187,15 @@
                 ids.push($(this).val())
             }
         });
-        layer.confirm('确认要删除吗？' + ids.toString(), function (index) {
-            //捉到所有被选中的，发异步进行删除
+        layer.confirm('确认要删除吗？' + ids.toString(), function () {
+            $.ajax({
+                type: "POST",
+                url: "member/delMembers",
+                data: {ids: ids.toString()},
+                datatype: "json",
+                success: function () {
+                }
+            });
             layer.msg('删除成功', {icon: 1});
             $(".layui-form-checked").not('.header').parents('tr').remove();
         });

@@ -31,6 +31,17 @@ public class MemberController {
         return memberService.getMemberCount();
     }
 
+    @RequestMapping("/listMember")
+    @ResponseBody
+    public Member listMember(String id) {
+        return memberService.getMember(id);
+    }
+    @RequestMapping("/listMemberByTell")
+    @ResponseBody
+    public Member listMemberByTell(String tell) {
+        return memberService.listMemberByTell(tell);
+    }
+
     @RequestMapping("/listMembers")
     @ResponseBody
     public ArrayList<Member> listMembers(String start) {

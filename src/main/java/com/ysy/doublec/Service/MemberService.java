@@ -42,4 +42,8 @@ public class MemberService {
     public void delMember(String[] deleteIds) {
         memberDao.delMember(deleteIds);
     }
+
+    public Member listMemberByTell(String tell) {
+        return memberDao.listMemberByTell(tell);
+    }
 }

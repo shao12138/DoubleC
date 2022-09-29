@@ -57,7 +57,6 @@
                                     id = data[i]['id']
                                     tell = data[i]['tell'];
                                     trust = parseInt(data[i]['trust']);
-                                    console.log(trust, typeof trust)
                                     if (trust == 0) {
                                         trust = "<a class='layui-btn layui-btn-primary'>" + data[i]['trust'] + "%</a>";
                                     } else if (0 < trust && trust <= 25) {
@@ -108,12 +107,13 @@
                             class="layui-icon"></i>添加
                     </button>
                     <div class="layui-inline layui-show-xs-block">
-                        <input type="text" name="username" placeholder="请输入电话号查询" autocomplete="off"
+                        <input type="text" id="find_tell" name="tell" placeholder="请输入电话号查询" autocomplete="off"
                                class="layui-input">
                     </div>
                     <div class="layui-inline layui-show-xs-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="sreach"><i
-                                class="layui-icon">&#xe615;</i></button>
+                        <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="member_find()"><i
+                                class="layui-icon">&#xe615;</i>
+                        </button>
                     </div>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
@@ -177,6 +177,41 @@
 
     function member_edit(obj, id) {
         xadmin.open('编辑信息', 'member-edit.html?id=' + id, 600, 720)
+    }
+
+    function member_find() {
+        $.ajax({
+            type: "POST",
+            url: "member/listMemberByTell",
+            data: {tell: $('#find_tell').val()},
+            datatype: "json",
+            success: function (data) {
+                $('#memberList').empty();
+                $('#pageList').empty();
+                id = data['id']
+                tell = data['tell'];
+                trust = parseInt(data['trust']);
+                if (trust == 0) {
+                    trust = "<a class='layui-btn layui-btn-primary'>" + data['trust'] + "%</a>";
+                } else if (0 < trust && trust <= 25) {
+                    trust = "<a class='layui-btn layui-btn-danger'>" + data['trust'] + "%</a>";
+                } else if (25 < trust && trust <= 50) {
+                    trust = "<a class='layui-btn layui-btn-warm'>" + data['trust'] + "%</a>";
+                } else if (50 < trust && trust <= 80) {
+                    trust = "<a class='layui-btn layui-btn'>" + data['trust'] + "%</a>";
+                } else {
+                    trust = "<a class='layui-btn layui-btn-normal'>" + data['trust'] + "%</a>";
+                }
+                $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data['name'] + "</td><td>" + tell + "</td><td>" + data['password'] + "</td><td>" + data['sex'] +
+                    "</td><td>" + data['age'] + "</td><td>" + data['idcard'] + "</td><td>" + data['address'] + "</td><td>" + data['content'] + "</td><td>" +
+                    trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
+                    "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"
+                );
+                layui.use('form', function () {
+                    layui.form.render();
+                });
+            }
+        });
     }
 
     function delAll(argument) {

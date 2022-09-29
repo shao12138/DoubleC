@@ -30,4 +30,7 @@ public interface MemberDao {
     void editMember(Member member);
 
     void delMember(@Param("deleteIds") String[] deleteIds);
+
+    @Select("select * from members where tell=#{tell}")
+    Member listMemberByTell(String tell);
 }

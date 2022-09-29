@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/member")
@@ -17,13 +18,42 @@ public class MemberController {
     @Autowired
     MemberService memberService;
 
-    @RequestMapping("/add")
+    @RequestMapping("/addMember")
     @ResponseBody
-    public String add(String memberInfo) {
+    public String addMember(String memberInfo) {
         if (memberInfo.equals("")) {
             return "非法操作！！";
         }
         Member member = JSON.parseObject(memberInfo, Member.class);
-        return memberService.add(member);
+        return memberService.addMember(member);
+    }
+
+    @RequestMapping("/getMemberCount")
+    @ResponseBody
+    public String getMemberCount() {
+        return memberService.getMemberCount();
+    }
+
+    @RequestMapping("/listMembers")
+    @ResponseBody
+    public ArrayList<Member> listMembers(String start) {
+        return memberService.listMembers(start);
+    }
+
+    @RequestMapping("/getMember")
+    @ResponseBody
+    public Member getMember(String id) {
+        Member member = memberService.getMember(id);
+        return member;
+    }
+
+    @RequestMapping("/editMember")
+    @ResponseBody
+    public String editMember(String memberInfo) {
+        if (memberInfo.equals("")) {
+            return "非法操作！！";
+        }
+        Member member = JSON.parseObject(memberInfo, Member.class);
+        return memberService.editMember(member);
     }
 }

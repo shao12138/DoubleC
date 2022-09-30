@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>电能仓</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="./css/font.css">
+    <link rel="stylesheet" href="./css/xadmin.css">
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+<!--    <script type="text/javascript">-->
+<!--        function GetPar(name) {				/* JS请求中的参数 */-->
+<!--            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");-->
+<!--            var r = window.location.search.substr(1).match(reg);-->
+<!--            if (r != null) return decodeURIComponent(r[2]);-->
+<!--            return null;-->
+<!--        }-->
+
+<!--        var nextpage = GetPar('nextpage');-->
+<!--        if (nextpage == null || nextpage == "") {-->
+<!--            nextpage = 1;-->
+<!--        }-->
+<!--        $(document).ready(-->
+<!--            function () {-->
+<!--                $.ajax({-->
+<!--                    type: "POST",-->
+<!--                    url: "/cell/getCellCount",-->
+<!--                    datatype: "json",-->
+<!--                    success: function (pages) {-->
+<!--                        pages /= 10;-->
+<!--                        if (pages != parseInt(pages)) {-->
+<!--                            pages = parseInt(pages) + 1;-->
+<!--                        }-->
+<!--                        for (i = 0; i < pages; i++) {-->
+<!--                            if (i + 1 == nextpage) {-->
+<!--                                $('#pageList').append("<span class='current'>" + (i + 1) + "</span>");-->
+<!--                            } else {-->
+<!--                                $('#pageList').append("<a class='num' href='cell-list.html?nextpage=" + (i + 1) + "'>" + (i + 1) + "</a>");-->
+<!--                            }-->
+<!--                        }-->
+<!--                        $.ajax({-->
+<!--                            type: "POST",-->
+<!--                            url: "cell/listCells",-->
+<!--                            data: {start: (nextpage - 1) * 10},-->
+<!--                            datatype: "json",-->
+<!--                            success: function (data) {-->
+<!--                                console.log(data);-->
+<!--                                $('#memberList').empty();-->
+<!--                                // $.each(data, function (i, n) {-->
+<!--                                //     id = data[i]['id']-->
+<!--                                //     tell = data[i]['tell'];-->
+<!--                                //     trust = parseInt(data[i]['trust']);-->
+<!--                                //     if (trust == 0) {-->
+<!--                                //         trust = "<a class='layui-btn layui-btn-primary'>" + data[i]['trust'] + "%</a>";-->
+<!--                                //     } else if (0 < trust && trust <= 25) {-->
+<!--                                //         trust = "<a class='layui-btn layui-btn-danger'>" + data[i]['trust'] + "%</a>";-->
+<!--                                //     } else if (25 < trust && trust <= 50) {-->
+<!--                                //         trust = "<a class='layui-btn layui-btn-warm'>" + data[i]['trust'] + "%</a>";-->
+<!--                                //     } else if (50 < trust && trust <= 80) {-->
+<!--                                //         trust = "<a class='layui-btn layui-btn'>" + data[i]['trust'] + "%</a>";-->
+<!--                                //     } else {-->
+<!--                                //         trust = "<a class='layui-btn layui-btn-normal'>" + data[i]['trust'] + "%</a>";-->
+<!--                                //     }-->
+<!--                                //     $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] + "</td><td>" + tell + "</td><td>" + data[i]['password'] + "</td><td>" + data[i]['sex'] +-->
+<!--                                //         "</td><td>" + data[i]['age'] + "</td><td>" + data[i]['idcard'] + "</td><td>" + data[i]['address'] + "</td><td>" + data[i]['content'] + "</td><td>" +-->
+<!--                                //         trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +-->
+<!--                                //         "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"-->
+<!--                                //     );-->
+<!--                                //     layui.use('form', function () {-->
+<!--                                //         layui.form.render();-->
+<!--                                //     });-->
+<!--                                // });-->
+<!--                            }-->
+<!--                        });-->
+<!--                    }-->
+<!--                });-->
+<!--            });-->
+<!--    </script>-->
+</head>
+<body>
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">仓储管理</a>
+            <a>
+              <cite>存储区管理</cite></a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
+       onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>刷新</a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
+                    </button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,600)" style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon"></i>添加
+                    </button>
+                    <div class="layui-inline layui-show-xs-block">
+                        <input type="text" id="find_tell" name="tell" placeholder="请输入电话号查询" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-inline layui-show-xs-block">
+                        <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="member_find()"><i class="layui-icon">&#xe615;</i></button>
+                    </div>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" lay-filter="checkall" name="" lay-skin="primary">
+                            </th>
+                            <th>ID</th>
+                            <th>电池名</th>
+                            <th>电池类型</th>
+                            <th>电池总数</th>
+                            <th>可用次数</th>
+                            <th>租赁价格</th>
+                            <th>电池总容量</th>
+                            <th>电池当前容量</th>
+                            <th>电压</th>
+                            <th>电池寿命</th>
+                            <th>租赁时间</th>
+                            <th>电池位置</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="memberList">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body ">
+                    <div class="page">
+                        <div id="pageList">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    layui.use(['laydate', 'form'], function () {
+        var laydate = layui.laydate;
+        var form = layui.form;
+        // 监听全选
+        form.on('checkbox(checkall)', function (data) {
+
+            if (data.elem.checked) {
+                $('tbody input').prop('checked', true);
+            } else {
+                $('tbody input').prop('checked', false);
+            }
+            form.render('checkbox');
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    function member_edit(obj, id) {
+        xadmin.open('编辑信息', 'member-edit.html?id=' + id, 600, 720)
+    }
+
+    function member_find() {
+        $.ajax({
+            type: "POST",
+            url: "member/listMemberByTell",
+            data: {tell: $('#find_tell').val()},
+            datatype: "json",
+            success: function (data) {
+                $('#memberList').empty();
+                $('#pageList').empty();
+                id = data['id']
+                tell = data['tell'];
+                trust = parseInt(data['trust']);
+                if (trust == 0) {
+                    trust = "<a class='layui-btn layui-btn-primary'>" + data['trust'] + "%</a>";
+                } else if (0 < trust && trust <= 25) {
+                    trust = "<a class='layui-btn layui-btn-danger'>" + data['trust'] + "%</a>";
+                } else if (25 < trust && trust <= 50) {
+                    trust = "<a class='layui-btn layui-btn-warm'>" + data['trust'] + "%</a>";
+                } else if (50 < trust && trust <= 80) {
+                    trust = "<a class='layui-btn layui-btn'>" + data['trust'] + "%</a>";
+                } else {
+                    trust = "<a class='layui-btn layui-btn-normal'>" + data['trust'] + "%</a>";
+                }
+                $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data['name'] + "</td><td>" + tell + "</td><td>" + data['password'] + "</td><td>" + data['sex'] +
+                    "</td><td>" + data['age'] + "</td><td>" + data['idcard'] + "</td><td>" + data['address'] + "</td><td>" + data['content'] + "</td><td>" +
+                    trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
+                    "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"
+                );
+                layui.use('form', function () {
+                    layui.form.render();
+                });
+            }
+        });
+    }
+
+    function delAll(argument) {
+        var ids = [];
+        // 获取选中的id 
+        $('tbody input').each(function (index, el) {
+            if ($(this).prop('checked')) {
+                ids.push($(this).val())
+            }
+        });
+        layer.confirm('确认要删除吗？' + ids.toString(), function () {
+            $.ajax({
+                type: "POST",
+                url: "member/delMembers",
+                data: {ids: ids.toString()},
+                datatype: "json",
+                success: function () {
+                }
+            });
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+    }
+</script>
+</html>

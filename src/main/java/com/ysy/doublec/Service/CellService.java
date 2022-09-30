@@ -1,0 +1,46 @@
+package com.ysy.doublec.Service;
+
+import com.ysy.doublec.Mapper.CellDao;
+import com.ysy.doublec.Pojo.Cell;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CellService {
+    @Autowired
+    CellDao cellDao;
+
+//    public String addMember(Member member) {
+//        if (memberDao.findByMemberTell(member.getTell()) != null) {
+//            return "fail";
+//        } else {
+//            memberDao.addMember(member);
+//            return "success";
+//        }
+//    }
+
+    public String getCellCount() {
+        return cellDao.getCellCount();
+    }
+
+//    public ArrayList<Member> listMembers(String start) {
+//        return memberDao.listMembers(start);
+//    }
+//
+//    public Member getMember(String id) {
+//        return memberDao.getMember(id);
+//    }
+//
+//    public String editMember(Member member) {
+//        memberDao.editMember(member);
+//        return "success";
+//    }
+//
+//    public void delMember(String[] deleteIds) {
+//        memberDao.delMember(deleteIds);
+//    }
+//
+//    public Member listMemberByTell(String tell) {
+//        return memberDao.listMemberByTell(tell);
+//    }
+}

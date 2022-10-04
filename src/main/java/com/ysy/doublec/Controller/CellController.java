@@ -8,30 +8,20 @@ import com.ysy.doublec.Service.CellService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.validation.annotation.Validated;
 
-import javax.servlet.ServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/cell")
 public class CellController {
     @Autowired
     CellService cellService;
-    @Value("${file.upload-folder}")
-    private String path;
 
     @RequestMapping("/addCellPic")
     @ResponseBody
@@ -56,11 +46,11 @@ public class CellController {
         return cellService.getCellCount();
     }
 
-    //    @RequestMapping("/listMember")
-//    @ResponseBody
-//    public Member listMember(String id) {
-//        return memberService.getMember(id);
-//    }
+    @RequestMapping("/listCells")
+    @ResponseBody
+    public ArrayList<Cell> listCells(String start) {
+        return cellService.listCells(start, "1");
+    }
 //    @RequestMapping("/listMemberByTell")
 //    @ResponseBody
 //    public Member listMemberByTell(String tell) {

@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -50,10 +51,10 @@ public class CellService {
         }
     }
 
-//    public ArrayList<Member> listMembers(String start) {
-//        return memberDao.listMembers(start);
-//    }
-//
+    public ArrayList<Cell> listCells(String start, String position) {
+        return cellDao.listCells(start, position);
+    }
+
 //    public Member getMember(String id) {
 //        return memberDao.getMember(id);
 //    }

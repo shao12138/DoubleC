@@ -13,18 +13,15 @@ public interface CellDao {
     @Select("select * from cells where name=#{name}")
     Member findByCellName(String name);
 
-    @Insert("insert into cells(name,kind,num,price,capacity,valtage,times,targetName) " +
-            "values(#{name},#{kind},#{num},#{price},#{capacity},#{valtage},#{times},#{targetName})")
+    @Insert("insert into cells(name,kind,num,num_now,price,capacity,capacity_now,valtage,times,rent_time,targetName) " +
+            "values(#{name},#{kind},#{num},#{num},#{price},#{capacity},#{capacity},#{valtage},#{times},#{times},#{targetName})")
     void addCell(Cell cell);
-//
-//    @Select("select count(1) from members")
-//    String getMemberCount();
-//
-//    @Select("select * from members limit ${start},10")
-//    ArrayList<Member> listMembers(@Param(value = "start") String start);
 
     @Select("select count(1) from cells")
     String getCellCount();
+
+    @Select("select * from cells where position=#{position} limit ${start},10 ")
+    ArrayList<Cell> listCells(@Param(value = "start") String start,@Param(value = "position") String position);
 
 //    @Update("update members set address=#{address},age=#{age},content=#{content},idcard=#{idcard},name=#{name}," +
 //            "trust=#{trust},password=#{password},sex=#{sex} where tell=#{tell}")

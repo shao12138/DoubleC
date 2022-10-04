@@ -10,8 +10,8 @@ public class Cell {
     private Integer capacity;
     private Integer capacity_now;
     private Integer valtage;
-    private String times;
-    private String date;
+    private Integer times;
+    private Integer date;
     private String position;
     private String rent_time;
     private String targetName;
@@ -19,7 +19,7 @@ public class Cell {
     public Cell() {
     }
 
-    public Cell(int id, String name, String kind, Integer num, Integer price, Integer num_now, Integer capacity, Integer capacity_now, Integer valtage, String times, String date, String position, String rent_time, String targetName) {
+    public Cell(int id, String name, String kind, Integer num, Integer price, Integer num_now, Integer capacity, Integer capacity_now, Integer valtage, Integer times, Integer date, String position, String rent_time, String targetName) {
         this.id = id;
         this.name = name;
         this.kind = kind;
@@ -108,19 +108,19 @@ public class Cell {
         this.valtage = valtage;
     }
 
-    public String getTimes() {
+    public Integer getTimes() {
         return times;
     }
 
-    public void setTimes(String times) {
+    public void setTimes(Integer times) {
         this.times = times;
     }
 
-    public String getDate() {
+    public Integer getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Integer date) {
         this.date = date;
     }
 

@@ -53,31 +53,20 @@
                             datatype: "json",
                             success: function (data) {
                                 console.log(data);
-                                $('#memberList').empty();
-                                // $.each(data, function (i, n) {
-                                //     id = data[i]['id']
-                                //     tell = data[i]['tell'];
-                                //     trust = parseInt(data[i]['trust']);
-                                //     if (trust == 0) {
-                                //         trust = "<a class='layui-btn layui-btn-primary'>" + data[i]['trust'] + "%</a>";
-                                //     } else if (0 < trust && trust <= 25) {
-                                //         trust = "<a class='layui-btn layui-btn-danger'>" + data[i]['trust'] + "%</a>";
-                                //     } else if (25 < trust && trust <= 50) {
-                                //         trust = "<a class='layui-btn layui-btn-warm'>" + data[i]['trust'] + "%</a>";
-                                //     } else if (50 < trust && trust <= 80) {
-                                //         trust = "<a class='layui-btn layui-btn'>" + data[i]['trust'] + "%</a>";
-                                //     } else {
-                                //         trust = "<a class='layui-btn layui-btn-normal'>" + data[i]['trust'] + "%</a>";
-                                //     }
-                                //     $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] + "</td><td>" + tell + "</td><td>" + data[i]['password'] + "</td><td>" + data[i]['sex'] +
-                                //         "</td><td>" + data[i]['age'] + "</td><td>" + data[i]['idcard'] + "</td><td>" + data[i]['address'] + "</td><td>" + data[i]['content'] + "</td><td>" +
-                                //         trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
-                                //         "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"
-                                //     );
-                                //     layui.use('form', function () {
-                                //         layui.form.render();
-                                //     });
-                                // });
+                                $('#cellList').empty();
+                                $.each(data, function (i, n) {
+                                    id = data[i]['id']
+                                    $('#cellList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] +
+                                        "</td><td><img src='/uploads/" + data[i]['targetName'] + "'></td><td>" + data[i]['kind'] + "</td><td>" + data[i]['num'] + "</td><td>" + data[i]['times'] + "次</td><td>" + data[i]['rent_time'] + "次</td><td>" +
+                                        data[i]['price'] + "</td><td>" + data[i]['capacity'] + "AH</td><td>" + data[i]['capacity_now'] +
+                                        "AH</td><td>" + data[i]['valtage'] + "V</td><td>" + data[i]['date'] +
+                                        "年</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
+                                        "</td></tr>"
+                                    );
+                                    layui.use('form', function () {
+                                        layui.form.render();
+                                    });
+                                });
                             }
                         });
                     }
@@ -103,13 +92,16 @@
                 <div class="layui-card-body ">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
                     </button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,800)" style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon"></i>添加
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,800)"
+                            style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon"></i>添加
                     </button>
                     <div class="layui-inline layui-show-xs-block">
-                        <input type="text" id="find_tell" name="tell" placeholder="请输入电话号查询" autocomplete="off" class="layui-input">
+                        <input type="text" id="find_tell" name="tell" placeholder="请输入电池序列号查询" autocomplete="off"
+                               class="layui-input">
                     </div>
                     <div class="layui-inline layui-show-xs-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="member_find()"><i class="layui-icon">&#xe615;</i></button>
+                        <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="member_find()"><i
+                                class="layui-icon">&#xe615;</i></button>
                     </div>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
@@ -121,20 +113,20 @@
                             </th>
                             <th>ID</th>
                             <th>电池名</th>
+                            <th>电池</th>
                             <th>电池类型</th>
                             <th>电池总数</th>
+                            <th>总次数</th>
                             <th>可用次数</th>
                             <th>租赁价格</th>
                             <th>电池总容量</th>
                             <th>电池当前容量</th>
                             <th>电压</th>
                             <th>电池寿命</th>
-                            <th>租赁时间</th>
-                            <th>电池位置</th>
                             <th>操作</th>
                         </tr>
                         </thead>
-                        <tbody id="memberList">
+                        <tbody id="cellList">
                         </tbody>
                     </table>
                 </div>

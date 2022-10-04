@@ -10,12 +10,12 @@ import java.util.ArrayList;
 @Repository
 @Mapper
 public interface CellDao {
-//    @Select("select * from members where tell=#{tell}")
-//    Member findByMemberTell(String tell);
-//
-//    @Insert("insert into members(address,age,content,idcard,name,password,sex,tell) " +
-//            "values(#{address},#{age},#{content},#{idcard},#{name},#{password},#{sex},#{tell})")
-//    void addMember(Member member);
+    @Select("select * from cells where name=#{name}")
+    Member findByCellName(String name);
+
+    @Insert("insert into cells(name,kind,num,price,capacity,valtage,times,targetName) " +
+            "values(#{name},#{kind},#{num},#{price},#{capacity},#{valtage},#{times},#{targetName})")
+    void addCell(Cell cell);
 //
 //    @Select("select count(1) from members")
 //    String getMemberCount();

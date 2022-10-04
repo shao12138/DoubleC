@@ -4,22 +4,22 @@ public class Cell {
     private int id;
     private String name;
     private String kind;
-    private String num;
-    private String price;
-    private String num_now;
-    private String capacity;
-    private String capacity_now;
-    private String voltage;
+    private Integer num;
+    private Integer price;
+    private Integer num_now;
+    private Integer capacity;
+    private Integer capacity_now;
+    private Integer valtage;
     private String times;
     private String date;
     private String position;
     private String rent_time;
-    
+    private String targetName;
 
     public Cell() {
     }
 
-    public Cell(int id, String name, String kind, String num, String price, String num_now, String capacity, String capacity_now, String voltage, String rent_time, String times, String date, String position) {
+    public Cell(int id, String name, String kind, Integer num, Integer price, Integer num_now, Integer capacity, Integer capacity_now, Integer valtage, String times, String date, String position, String rent_time, String targetName) {
         this.id = id;
         this.name = name;
         this.kind = kind;
@@ -28,19 +28,12 @@ public class Cell {
         this.num_now = num_now;
         this.capacity = capacity;
         this.capacity_now = capacity_now;
-        this.voltage = voltage;
-        this.rent_time = rent_time;
+        this.valtage = valtage;
         this.times = times;
         this.date = date;
         this.position = position;
-    }
-
-    public String getRent_time() {
-        return rent_time;
-    }
-
-    public void setRent_time(String rent_time) {
         this.rent_time = rent_time;
+        this.targetName = targetName;
     }
 
     public int getId() {
@@ -67,52 +60,52 @@ public class Cell {
         this.kind = kind;
     }
 
-    public String getNum() {
+    public Integer getNum() {
         return num;
     }
 
-    public void setNum(String num) {
+    public void setNum(Integer num) {
         this.num = num;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
-    public String getNum_now() {
+    public Integer getNum_now() {
         return num_now;
     }
 
-    public void setNum_now(String num_now) {
+    public void setNum_now(Integer num_now) {
         this.num_now = num_now;
     }
 
-    public String getCapacity() {
+    public Integer getCapacity() {
         return capacity;
     }
 
-    public void setCapacity(String capacity) {
+    public void setCapacity(Integer capacity) {
         this.capacity = capacity;
     }
 
-    public String getCapacity_now() {
+    public Integer getCapacity_now() {
         return capacity_now;
     }
 
-    public void setCapacity_now(String capacity_now) {
+    public void setCapacity_now(Integer capacity_now) {
         this.capacity_now = capacity_now;
     }
 
-    public String getVoltage() {
-        return voltage;
+    public Integer getValtage() {
+        return valtage;
     }
 
-    public void setVoltage(String voltage) {
-        this.voltage = voltage;
+    public void setValtage(Integer valtage) {
+        this.valtage = valtage;
     }
 
     public String getTimes() {
@@ -137,5 +130,21 @@ public class Cell {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public String getRent_time() {
+        return rent_time;
+    }
+
+    public void setRent_time(String rent_time) {
+        this.rent_time = rent_time;
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
     }
 }

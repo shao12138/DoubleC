@@ -16,74 +16,74 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-<!--    <script type="text/javascript">-->
-<!--        function GetPar(name) {				/* JS请求中的参数 */-->
-<!--            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");-->
-<!--            var r = window.location.search.substr(1).match(reg);-->
-<!--            if (r != null) return decodeURIComponent(r[2]);-->
-<!--            return null;-->
-<!--        }-->
+    <script type="text/javascript">
+        function GetPar(name) {				/* JS请求中的参数 */
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURIComponent(r[2]);
+            return null;
+        }
 
-<!--        var nextpage = GetPar('nextpage');-->
-<!--        if (nextpage == null || nextpage == "") {-->
-<!--            nextpage = 1;-->
-<!--        }-->
-<!--        $(document).ready(-->
-<!--            function () {-->
-<!--                $.ajax({-->
-<!--                    type: "POST",-->
-<!--                    url: "/cell/getCellCount",-->
-<!--                    datatype: "json",-->
-<!--                    success: function (pages) {-->
-<!--                        pages /= 10;-->
-<!--                        if (pages != parseInt(pages)) {-->
-<!--                            pages = parseInt(pages) + 1;-->
-<!--                        }-->
-<!--                        for (i = 0; i < pages; i++) {-->
-<!--                            if (i + 1 == nextpage) {-->
-<!--                                $('#pageList').append("<span class='current'>" + (i + 1) + "</span>");-->
-<!--                            } else {-->
-<!--                                $('#pageList').append("<a class='num' href='cell-list.html?nextpage=" + (i + 1) + "'>" + (i + 1) + "</a>");-->
-<!--                            }-->
-<!--                        }-->
-<!--                        $.ajax({-->
-<!--                            type: "POST",-->
-<!--                            url: "cell/listCells",-->
-<!--                            data: {start: (nextpage - 1) * 10},-->
-<!--                            datatype: "json",-->
-<!--                            success: function (data) {-->
-<!--                                console.log(data);-->
-<!--                                $('#memberList').empty();-->
-<!--                                // $.each(data, function (i, n) {-->
-<!--                                //     id = data[i]['id']-->
-<!--                                //     tell = data[i]['tell'];-->
-<!--                                //     trust = parseInt(data[i]['trust']);-->
-<!--                                //     if (trust == 0) {-->
-<!--                                //         trust = "<a class='layui-btn layui-btn-primary'>" + data[i]['trust'] + "%</a>";-->
-<!--                                //     } else if (0 < trust && trust <= 25) {-->
-<!--                                //         trust = "<a class='layui-btn layui-btn-danger'>" + data[i]['trust'] + "%</a>";-->
-<!--                                //     } else if (25 < trust && trust <= 50) {-->
-<!--                                //         trust = "<a class='layui-btn layui-btn-warm'>" + data[i]['trust'] + "%</a>";-->
-<!--                                //     } else if (50 < trust && trust <= 80) {-->
-<!--                                //         trust = "<a class='layui-btn layui-btn'>" + data[i]['trust'] + "%</a>";-->
-<!--                                //     } else {-->
-<!--                                //         trust = "<a class='layui-btn layui-btn-normal'>" + data[i]['trust'] + "%</a>";-->
-<!--                                //     }-->
-<!--                                //     $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] + "</td><td>" + tell + "</td><td>" + data[i]['password'] + "</td><td>" + data[i]['sex'] +-->
-<!--                                //         "</td><td>" + data[i]['age'] + "</td><td>" + data[i]['idcard'] + "</td><td>" + data[i]['address'] + "</td><td>" + data[i]['content'] + "</td><td>" +-->
-<!--                                //         trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +-->
-<!--                                //         "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"-->
-<!--                                //     );-->
-<!--                                //     layui.use('form', function () {-->
-<!--                                //         layui.form.render();-->
-<!--                                //     });-->
-<!--                                // });-->
-<!--                            }-->
-<!--                        });-->
-<!--                    }-->
-<!--                });-->
-<!--            });-->
-<!--    </script>-->
+        var nextpage = GetPar('nextpage');
+        if (nextpage == null || nextpage == "") {
+            nextpage = 1;
+        }
+        $(document).ready(
+            function () {
+                $.ajax({
+                    type: "POST",
+                    url: "/cell/getCellCount",
+                    datatype: "json",
+                    success: function (pages) {
+                        pages /= 10;
+                        if (pages != parseInt(pages)) {
+                            pages = parseInt(pages) + 1;
+                        }
+                        for (i = 0; i < pages; i++) {
+                            if (i + 1 == nextpage) {
+                                $('#pageList').append("<span class='current'>" + (i + 1) + "</span>");
+                            } else {
+                                $('#pageList').append("<a class='num' href='cell-list.html?nextpage=" + (i + 1) + "'>" + (i + 1) + "</a>");
+                            }
+                        }
+                        $.ajax({
+                            type: "POST",
+                            url: "cell/listCells",
+                            data: {start: (nextpage - 1) * 10},
+                            datatype: "json",
+                            success: function (data) {
+                                console.log(data);
+                                $('#memberList').empty();
+                                // $.each(data, function (i, n) {
+                                //     id = data[i]['id']
+                                //     tell = data[i]['tell'];
+                                //     trust = parseInt(data[i]['trust']);
+                                //     if (trust == 0) {
+                                //         trust = "<a class='layui-btn layui-btn-primary'>" + data[i]['trust'] + "%</a>";
+                                //     } else if (0 < trust && trust <= 25) {
+                                //         trust = "<a class='layui-btn layui-btn-danger'>" + data[i]['trust'] + "%</a>";
+                                //     } else if (25 < trust && trust <= 50) {
+                                //         trust = "<a class='layui-btn layui-btn-warm'>" + data[i]['trust'] + "%</a>";
+                                //     } else if (50 < trust && trust <= 80) {
+                                //         trust = "<a class='layui-btn layui-btn'>" + data[i]['trust'] + "%</a>";
+                                //     } else {
+                                //         trust = "<a class='layui-btn layui-btn-normal'>" + data[i]['trust'] + "%</a>";
+                                //     }
+                                //     $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] + "</td><td>" + tell + "</td><td>" + data[i]['password'] + "</td><td>" + data[i]['sex'] +
+                                //         "</td><td>" + data[i]['age'] + "</td><td>" + data[i]['idcard'] + "</td><td>" + data[i]['address'] + "</td><td>" + data[i]['content'] + "</td><td>" +
+                                //         trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
+                                //         "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"
+                                //     );
+                                //     layui.use('form', function () {
+                                //         layui.form.render();
+                                //     });
+                                // });
+                            }
+                        });
+                    }
+                });
+            });
+    </script>
 </head>
 <body>
 <div class="x-nav">
@@ -103,7 +103,7 @@
                 <div class="layui-card-body ">
                     <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
                     </button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,600)" style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon"></i>添加
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,800)" style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon"></i>添加
                     </button>
                     <div class="layui-inline layui-show-xs-block">
                         <input type="text" id="find_tell" name="tell" placeholder="请输入电话号查询" autocomplete="off" class="layui-input">

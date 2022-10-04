@@ -26,70 +26,76 @@
                 <label for="L_name" class="layui-form-label">
                     <span class="x-red">*</span>电池名</label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_name" name="name" required="" lay-verify="required|name" autocomplete="off"
+                    <input type="text" id="L_name" name="name" required="" lay-verify="required" autocomplete="off"
                            class="layui-input"></div>
             </div>
             <div class="layui-form-item">
-                <label for="L_tell" class="layui-form-label">
+                <label for="L_kind" class="layui-form-label">
                     <span class="x-red">*</span>电池类型</label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_tell" name="tell" required="" lay-verify="phone" autocomplete="off"
+                    <input type="text" id="L_kind" name="kind" required="" lay-verify="required" autocomplete="off"
                            class="layui-input"></div>
             </div>
             <div class="layui-form-item">
-                <label for="L_password" class="layui-form-label">
+                <label for="L_num" class="layui-form-label">
                     <span class="x-red">*</span>电池数量</label>
                 <div class="layui-input-inline">
-                    <input type="password" id="L_password" name="password" required="" lay-verify="pass"
+                    <input type="text" id="L_num" name="num" required="" lay-verify="required|number"
                            autocomplete="off" class="layui-input"></div>
                 <div class="layui-form-mid layui-word-aux">10~1000</div>
             </div>
             <div class="layui-form-item">
-                <label for="L_sex" class="layui-form-label">
+                <label for="L_capacity" class="layui-form-label">
                     <span class="x-red">*</span>电池容量</label>
                 <div class="layui-input-inline">
-                    <input type="password" id="L_password" name="password" required="" lay-verify="pass"
+                    <input type="text" id="L_capacity" name="capacity" lay-verify="required|number"
                            autocomplete="off" class="layui-input"></div>
-                <div class="layui-form-mid layui-word-aux">单位AH：供电电流强度为1A时能持续工作1小时</div>
+                <div class="layui-form-mid layui-word-aux">单位AH</div>
             </div>
             <div class="layui-form-item">
-                <label for="L_password" class="layui-form-label">
+                <label for="L_valtage" class="layui-form-label">
                     <span class="x-red">*</span>电压</label>
                 <div class="layui-input-inline">
-                    <input type="password" id="L_password" name="password" required="" lay-verify="pass"
+                    <input type="text" id="L_valtage" name="valtage" lay-verify="required|number"
                            autocomplete="off" class="layui-input"></div>
-                <div class="layui-form-mid layui-word-aux"><=220V</div>
+                <div class="layui-form-mid layui-word-aux">≤220V，单位V</div>
             </div>
             <div class="layui-form-item">
-                <label for="L_idcard" class="layui-form-label">
+                <label for="L_times" class="layui-form-label">
                     <span class="x-red">*</span>电池寿命</label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_idcard" name="idcard" required="" lay-verify="identity"
+                    <input type="text" id="L_times" name="times" lay-verify="required|number"
                            autocomplete="off" class="layui-input"></div>
                 <div class="layui-form-mid layui-word-aux">使用次数</div>
             </div>
             <div class="layui-form-item">
-                <label for="L_address" class="layui-form-label">
+                <label for="L_url" class="layui-form-label">
                     <span class="x-red">*</span>图片</label>
-                <div class="layui-input-inline">
-                    <textarea placeholder="请输入内容" id="L_address" required="" name="address"
-                              class="layui-textarea"></textarea></div>
-                <div class="layui-form-mid layui-word-aux"><span class="x-red">*</span>用户详细地址</div>
+                <div class="layui-upload-drag" id="L_url">
+                    <i class="layui-icon"></i>
+                    <p>点击上传，或将文件拖拽到此处</p>
+                    <p>文件类型图片，文件大小<2MB</p>
+                    <div class="layui-hide" id="uploadDemoView">
+                        <hr>
+                        <img src="" alt="上传成功后渲染" style="max-width: 196px">
+                    </div>
+                </div>
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
-                <button class="layui-btn" lay-filter="add" lay-submit="">添加</button>
+                <button id="L_add" class="layui-btn" lay-filter="add" lay-submit="">添加</button>
             </div>
         </form>
     </div>
 </div>
 <script>
     var age = 30;
-    layui.use(['form', 'layer', 'jquery', 'slider'],
+    layui.use(['upload', 'form', 'layer', 'jquery', 'slider'],
         function () {
             $ = layui.jquery;
             var form = layui.form,
                 layer = layui.layer,
+                upload = layui.upload,
                 slider = layui.slider;
             slider.render({
                 elem: '#L_age',
@@ -101,31 +107,43 @@
                     age = value;
                 }
             });
-            //自定义验证规则
-            form.verify({
-                pass: [/(.+){6,12}$/, '密码必须6到12位'],
+            var targetName = "";
+            upload.render({
+                elem: '#L_url',
+                url: '/cell/addCellPic',
+                accept: 'images',//指定允许上传时校验的文件类型
+                acceptMime: 'image/*',//规定打开文件选择框时，筛选出的文件类型，值为用逗号隔开的 MIME 类型列表
+                field: 'cover',
+                size: 2048,
+                done: function (data) {
+                    layer.msg('上传成功!');
+                    layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', data.src);
+                    targetName = data['targetName']
+                }
             });
             //监听提交
             form.on('submit(add)',
                 function (data) {
-                    data['field']['age'] = age;
+                    if (targetName=="") {
+                        layer.alert("请上传图片!", {icon: 1});
+                        return false;
+                    }
+                    data['field']['targetName'] = targetName;
                     data = JSON.stringify(data['field']);
-                    //发异步，把数据提交给php
+                    console.log(data)
                     $.ajax({
                         type: "POST",
-                        url: "/member/addMember",
+                        url: "/cell/addCell",
                         data: {memberInfo: data},
                         datatype: "json",
                         success: function (key) {
                             if (key == "success") {
-                                layer.alert("添加成功!", {icon: 1}, function () {
+                                layer.alert("添加成功!", {icon: 2}, function () {
                                     //关闭当前frame
                                     xadmin.close();
                                     // 可以对父窗口进行刷新
                                     xadmin.father_reload();
                                 });
-                            } else if (key == "fail") {
-                                layer.alert("账号重复!", {icon: 2});
                             }
                         },
                     });

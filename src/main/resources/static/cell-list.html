@@ -103,17 +103,17 @@
                             style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon layui-icon-edit"
                                                                                     style="line-height:30px"></i>编辑
                     </button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,800)"
+                    <button class="layui-btn" onclick="xadmin.open('添加电池','./cell-add.html',600,800)"
                             style="line-height:1.6em;margin-top:4px;float:right"><i
                             class="layui-icon layui-icon-add-circle-fine" style="line-height:30px"></i>添加
                     </button>
                     <div class="layui-inline layui-show-xs-block">
-                        <input type="text" id="find_tell" name="tell" placeholder="请输入电池序列号查询"
+                        <input type="text" id="cell_find" name="name" placeholder="请输入电池名查询"
                                autocomplete="off"
                                class="layui-input">
                     </div>
                     <div class="layui-inline layui-show-xs-block">
-                        <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="member_find()"><i
+                        <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="cell_find()"><i
                                 class="layui-icon">&#xe615;</i></button>
                     </div>
                 </div>
@@ -231,30 +231,21 @@
     function cell_find() {
         $.ajax({
             type: "POST",
-            url: "member/listMemberByTell",
-            data: {tell: $('#find_tell').val()},
+            url: "cell/listCellByName",
+            data: {name: $('#cell_find').val()},
             datatype: "json",
             success: function (data) {
-                $('#memberList').empty();
                 $('#pageList').empty();
-                id = data['id']
-                tell = data['tell'];
-                trust = parseInt(data['trust']);
-                if (trust == 0) {
-                    trust = "<a class='layui-btn layui-btn-primary'>" + data['trust'] + "%</a>";
-                } else if (0 < trust && trust <= 25) {
-                    trust = "<a class='layui-btn layui-btn-danger'>" + data['trust'] + "%</a>";
-                } else if (25 < trust && trust <= 50) {
-                    trust = "<a class='layui-btn layui-btn-warm'>" + data['trust'] + "%</a>";
-                } else if (50 < trust && trust <= 80) {
-                    trust = "<a class='layui-btn layui-btn'>" + data['trust'] + "%</a>";
-                } else {
-                    trust = "<a class='layui-btn layui-btn-normal'>" + data['trust'] + "%</a>";
+                $('#cellList').empty();
+                if (data==""){
+                    layer.msg('没有找到！', {icon: 2});
+                    return false;
                 }
-                $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data['name'] + "</td><td>" + tell + "</td><td>" + data['password'] + "</td><td>" + data['sex'] +
-                    "</td><td>" + data['age'] + "</td><td>" + data['idcard'] + "</td><td>" + data['address'] + "</td><td>" + data['content'] + "</td><td>" +
-                    trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
-                    "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"
+                $('#cellList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + data['id'] + "></td><td>" + data['id'] + "</td><td>" + data['name'] +
+                    "</td><td><img src='/uploads/" + data['targetName'] + "'></td><td>" + data['kind'] + "</td><td>" + data['num'] + "</td><td>" + data['times'] + "次</td><td>" + data['rent_time'] + "次</td><td>" +
+                    data['price'] + "</td><td>" + data['capacity'] + "AH</td><td>" + data['capacity_now'] +
+                    "AH</td><td>" + data['valtage'] + "V</td><td>" + data['date'] +
+                    "年</td></tr>"
                 );
                 layui.use('form', function () {
                     layui.form.render();

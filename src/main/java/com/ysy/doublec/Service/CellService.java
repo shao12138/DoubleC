@@ -73,14 +73,7 @@ public class CellService {
         return "success";
     }
 
-//    public Member getMember(String id) {
-//        return memberDao.getMember(id);
-//    }
-//    public void delMember(String[] deleteIds) {
-//        memberDao.delMember(deleteIds);
-//    }
-//
-//    public Member listMemberByTell(String tell) {
-//        return memberDao.listMemberByTell(tell);
-//    }
+    public Cell findByCellName(String name) {
+        return cellDao.findByCellName(name);
+    }
 }

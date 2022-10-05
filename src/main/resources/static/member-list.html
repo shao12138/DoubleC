@@ -188,6 +188,10 @@
             success: function (data) {
                 $('#memberList').empty();
                 $('#pageList').empty();
+                if (data==""){
+                    layer.msg('没有找到！', {icon: 2});
+                    return false;
+                }
                 id = data['id']
                 tell = data['tell'];
                 trust = parseInt(data['trust']);

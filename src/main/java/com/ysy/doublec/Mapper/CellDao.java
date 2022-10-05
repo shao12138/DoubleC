@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Mapper
 public interface CellDao {
     @Select("select * from cells where name=#{name}")
-    Member findByCellName(String name);
+    Cell findByCellName(String name);
 
     @Insert("insert into cells(name,kind,num,num_now,price,capacity,capacity_now,valtage,times,rent_time,targetName,date) " +
             "values(#{name},#{kind},#{num},#{num},#{price},#{capacity},#{capacity},#{valtage},#{times},#{times},#{targetName},#{date})")

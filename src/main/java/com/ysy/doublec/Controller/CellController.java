@@ -82,5 +82,10 @@ public class CellController {
         Cell cell = JSON.parseObject(cellInfo, Cell.class);
         return cellService.editCell(cell);
     }
+    @RequestMapping("/listCellByName")
+    @ResponseBody
+    public Cell listCellByName(String name) {
+        return cellService.findByCellName(name);
+    }
 
 }

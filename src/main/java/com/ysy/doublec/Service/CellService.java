@@ -38,8 +38,8 @@ public class CellService {
         return targetName;
     }
 
-    public String getCellCount() {
-        return cellDao.getCellCount();
+    public String getCellCount(String position) {
+        return cellDao.getCellCount(position);
     }
 
     public String addCell(Cell cell) {
@@ -55,15 +55,27 @@ public class CellService {
         return cellDao.listCells(start, position);
     }
 
+
+    public Cell getCell(String id) {
+        return cellDao.getCell(id);
+    }
+
+    public void cell_charge(String[] ids) {
+        cellDao.cell_charge(ids);
+    }
+
+    public void cell_scrap(String[] ids) {
+        cellDao.cell_scrap(ids);
+    }
+
+    public String editCell(Cell cell) {
+        cellDao.editCell(cell);
+        return "success";
+    }
+
 //    public Member getMember(String id) {
 //        return memberDao.getMember(id);
 //    }
-//
-//    public String editMember(Member member) {
-//        memberDao.editMember(member);
-//        return "success";
-//    }
-//
 //    public void delMember(String[] deleteIds) {
 //        memberDao.delMember(deleteIds);
 //    }

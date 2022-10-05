@@ -23,7 +23,6 @@
             if (r != null) return decodeURIComponent(r[2]);
             return null;
         }
-
         var nextpage = GetPar('nextpage');
         if (nextpage == null || nextpage == "") {
             nextpage = 1;
@@ -32,8 +31,9 @@
             function () {
                 $.ajax({
                     type: "POST",
-                    url: "/member/getMemberCount",
+                    url: "/cell/getCellCount",
                     datatype: "json",
+                    data: {position: 2},
                     success: function (pages) {
                         pages /= 10;
                         if (pages != parseInt(pages)) {
@@ -43,35 +43,24 @@
                             if (i + 1 == nextpage) {
                                 $('#pageList').append("<span class='current'>" + (i + 1) + "</span>");
                             } else {
-                                $('#pageList').append("<a class='num' href='member-list.html?nextpage=" + (i + 1) + "'>" + (i + 1) + "</a>");
+                                $('#pageList').append("<a class='num' href='cell-list.html?nextpage=" + (i + 1) + "'>" + (i + 1) + "</a>");
                             }
                         }
                         $.ajax({
                             type: "POST",
-                            url: "member/listMembers",
-                            data: {start: (nextpage - 1) * 10},
+                            url: "cell/listCells",
+                            data: {start: (nextpage - 1) * 10,position: 2},
                             datatype: "json",
                             success: function (data) {
-                                $('#memberList').empty();
+                                console.log(data);
+                                $('#cellList').empty();
                                 $.each(data, function (i, n) {
                                     id = data[i]['id']
-                                    tell = data[i]['tell'];
-                                    trust = parseInt(data[i]['trust']);
-                                    if (trust == 0) {
-                                        trust = "<a class='layui-btn layui-btn-primary'>" + data[i]['trust'] + "%</a>";
-                                    } else if (0 < trust && trust <= 25) {
-                                        trust = "<a class='layui-btn layui-btn-danger'>" + data[i]['trust'] + "%</a>";
-                                    } else if (25 < trust && trust <= 50) {
-                                        trust = "<a class='layui-btn layui-btn-warm'>" + data[i]['trust'] + "%</a>";
-                                    } else if (50 < trust && trust <= 80) {
-                                        trust = "<a class='layui-btn layui-btn'>" + data[i]['trust'] + "%</a>";
-                                    } else {
-                                        trust = "<a class='layui-btn layui-btn-normal'>" + data[i]['trust'] + "%</a>";
-                                    }
-                                    $('#memberList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] + "</td><td>" + tell + "</td><td>" + data[i]['password'] + "</td><td>" + data[i]['sex'] +
-                                        "</td><td>" + data[i]['age'] + "</td><td>" + data[i]['idcard'] + "</td><td>" + data[i]['address'] + "</td><td>" + data[i]['content'] + "</td><td>" +
-                                        trust + "</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
-                                        "<a onclick='historyMember(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='edit'>租赁历史</a></td></tr>"
+                                    $('#cellList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] +
+                                        "</td><td><img src='/uploads/" + data[i]['targetName'] + "'></td><td>" + data[i]['kind'] + "</td><td>" + data[i]['num'] + "</td><td>" + data[i]['times'] + "次</td><td>" + data[i]['rent_time'] + "次</td><td>" +
+                                        data[i]['price'] + "</td><td>" + data[i]['capacity'] + "AH</td><td>" + data[i]['capacity_now'] +
+                                        "AH</td><td>" + data[i]['valtage'] + "V</td><td>" + data[i]['date'] +
+                                        "年</td></tr>"
                                     );
                                     layui.use('form', function () {
                                         layui.form.render();
@@ -87,9 +76,9 @@
 <body>
 <div class="x-nav">
           <span class="layui-breadcrumb">
-            <a href="">会员管理</a>
+            <a href="">仓储管理</a>
             <a>
-              <cite>会员列表</cite></a>
+              <cite>存储区管理</cite></a>
           </span>
     <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right"
        onclick="location.reload()" title="刷新">
@@ -100,20 +89,31 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
-                    </button>
-                    <button class="layui-btn" onclick="xadmin.open('添加用户','./member-add.html',600,700)"
+                    <button class="layui-btn layui-btn-danger"
+                            onclick="cell_del()"
                             style="line-height:1.6em;margin-top:4px;float:right"><i
-                            class="layui-icon"></i>添加
+                            class="layui-icon layui-icon-close-fill" style="line-height:30px"></i>报废
+                    </button>
+                    <button class="layui-btn  layui-btn-normal" onclick="cell_charge()"
+                            style="line-height:1.6em;margin-top:4px;margin-right:10px;float:right"><i
+                            class="layui-icon layui-icon-chart" style="line-height:30px"></i>充电
+                    </button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-edit.html',600,800)"
+                            style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon layui-icon-edit"
+                                                                                    style="line-height:30px"></i>编辑
+                    </button>
+                    <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,800)"
+                            style="line-height:1.6em;margin-top:4px;float:right"><i
+                            class="layui-icon layui-icon-add-circle-fine" style="line-height:30px"></i>添加
                     </button>
                     <div class="layui-inline layui-show-xs-block">
-                        <input type="text" id="find_tell" name="tell" placeholder="请输入电话号查询" autocomplete="off"
+                        <input type="text" id="find_tell" name="tell" placeholder="请输入电池序列号查询"
+                               autocomplete="off"
                                class="layui-input">
                     </div>
                     <div class="layui-inline layui-show-xs-block">
                         <button class="layui-btn" lay-submit="" lay-filter="sreach" onclick="member_find()"><i
-                                class="layui-icon">&#xe615;</i>
-                        </button>
+                                class="layui-icon">&#xe615;</i></button>
                     </div>
                 </div>
                 <div class="layui-card-body layui-table-body layui-table-main">
@@ -124,19 +124,20 @@
                                 <input type="checkbox" lay-filter="checkall" name="" lay-skin="primary">
                             </th>
                             <th>ID</th>
-                            <th>姓名</th>
-                            <th>电话</th>
-                            <th>密码</th>
-                            <th>性别</th>
-                            <th>年龄</th>
-                            <th>身份证</th>
-                            <th>地址</th>
-                            <th>产业（电池用途）</th>
-                            <th>信用等级</th>
-                            <th>操作</th>
+                            <th>电池名</th>
+                            <th>电池</th>
+                            <th>电池类型</th>
+                            <th>电池总数</th>
+                            <th>总次数</th>
+                            <th>可用次数</th>
+                            <th>租赁价格</th>
+                            <th>电池总容量</th>
+                            <th>电池当前容量</th>
+                            <th>电压</th>
+                            <th>电池寿命</th>
                         </tr>
                         </thead>
-                        <tbody id="memberList">
+                        <tbody id="cellList">
                         </tbody>
                     </table>
                 </div>
@@ -175,11 +176,44 @@
         });
     });
 
-    function member_edit(obj, id) {
+    function cell_charge() {
+        var ids = [];
+        // 获取选中的id
+        $('tbody input').each(function (index, el) {
+            if ($(this).prop('checked')) {
+                ids.push($(this).val())
+            }
+        });
+        console.log(ids);
+    }
+
+    function cell_edit(obj, id) {
         xadmin.open('编辑信息', 'member-edit.html?id=' + id, 600, 720)
     }
 
-    function member_find() {
+    function cell_del(argument) {
+        var ids = [];
+        // 获取选中的id
+        $('tbody input').each(function (index, el) {
+            if ($(this).prop('checked')) {
+                ids.push($(this).val())
+            }
+        });
+        layer.confirm('确认要删除吗？' + ids.toString(), function () {
+            $.ajax({
+                type: "POST",
+                url: "member/delMembers",
+                data: {ids: ids.toString()},
+                datatype: "json",
+                success: function () {
+                    layer.msg('删除成功', {icon: 1});
+                    $(".layui-form-checked").not('.header').parents('tr').remove();
+                }
+            });
+        });
+    }
+
+    function cell_find() {
         $.ajax({
             type: "POST",
             url: "member/listMemberByTell",
@@ -214,26 +248,5 @@
         });
     }
 
-    function delAll(argument) {
-        var ids = [];
-        // 获取选中的id 
-        $('tbody input').each(function (index, el) {
-            if ($(this).prop('checked')) {
-                ids.push($(this).val())
-            }
-        });
-        layer.confirm('确认要删除吗？' + ids.toString(), function () {
-            $.ajax({
-                type: "POST",
-                url: "member/delMembers",
-                data: {ids: ids.toString()},
-                datatype: "json",
-                success: function () {
-                    layer.msg('删除成功', {icon: 1});
-                    $(".layui-form-checked").not('.header').parents('tr').remove();
-                }
-            });
-        });
-    }
 </script>
 </html>

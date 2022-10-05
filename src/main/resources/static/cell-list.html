@@ -34,6 +34,7 @@
                     type: "POST",
                     url: "/cell/getCellCount",
                     datatype: "json",
+                    data: {position: 1},
                     success: function (pages) {
                         pages /= 10;
                         if (pages != parseInt(pages)) {
@@ -49,7 +50,7 @@
                         $.ajax({
                             type: "POST",
                             url: "cell/listCells",
-                            data: {start: (nextpage - 1) * 10},
+                            data: {start: (nextpage - 1) * 10, position: 1},
                             datatype: "json",
                             success: function (data) {
                                 console.log(data);
@@ -60,8 +61,7 @@
                                         "</td><td><img src='/uploads/" + data[i]['targetName'] + "'></td><td>" + data[i]['kind'] + "</td><td>" + data[i]['num'] + "</td><td>" + data[i]['times'] + "次</td><td>" + data[i]['rent_time'] + "次</td><td>" +
                                         data[i]['price'] + "</td><td>" + data[i]['capacity'] + "AH</td><td>" + data[i]['capacity_now'] +
                                         "AH</td><td>" + data[i]['valtage'] + "V</td><td>" + data[i]['date'] +
-                                        "年</td><td><a onclick='member_edit(this," + id + ")' class='layui-btn layui-btn-normal' lay-event='detail'>编辑</a>" +
-                                        "</td></tr>"
+                                        "年</td></tr>"
                                     );
                                     layui.use('form', function () {
                                         layui.form.render();
@@ -90,13 +90,26 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
-                    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除
+                    <button class="layui-btn layui-btn-danger"
+                            onclick="cell_scrap()"
+                            style="line-height:1.6em;margin-top:4px;float:right"><i
+                            class="layui-icon layui-icon-close-fill" style="line-height:30px"></i>报废
+                    </button>
+                    <button class="layui-btn  layui-btn-normal" onclick="cell_charge()"
+                            style="line-height:1.6em;margin-top:4px;margin-right:10px;float:right"><i
+                            class="layui-icon layui-icon-chart" style="line-height:30px"></i>充电
+                    </button>
+                    <button class="layui-btn" onclick="cell_edit()"
+                            style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon layui-icon-edit"
+                                                                                    style="line-height:30px"></i>编辑
                     </button>
                     <button class="layui-btn" onclick="xadmin.open('添加用户','./cell-add.html',600,800)"
-                            style="line-height:1.6em;margin-top:4px;float:right"><i class="layui-icon"></i>添加
+                            style="line-height:1.6em;margin-top:4px;float:right"><i
+                            class="layui-icon layui-icon-add-circle-fine" style="line-height:30px"></i>添加
                     </button>
                     <div class="layui-inline layui-show-xs-block">
-                        <input type="text" id="find_tell" name="tell" placeholder="请输入电池序列号查询" autocomplete="off"
+                        <input type="text" id="find_tell" name="tell" placeholder="请输入电池序列号查询"
+                               autocomplete="off"
                                class="layui-input">
                     </div>
                     <div class="layui-inline layui-show-xs-block">
@@ -123,7 +136,6 @@
                             <th>电池当前容量</th>
                             <th>电压</th>
                             <th>电池寿命</th>
-                            <th>操作</th>
                         </tr>
                         </thead>
                         <tbody id="cellList">
@@ -165,11 +177,58 @@
         });
     });
 
-    function member_edit(obj, id) {
-        xadmin.open('编辑信息', 'member-edit.html?id=' + id, 600, 720)
+    function cell_charge() {
+        var ids = [];
+        // 获取选中的id
+        $('tbody input').each(function (index, el) {
+            if ($(this).prop('checked')) {
+                ids.push($(this).val())
+            }
+        });
+        if (ids.length == 0) {
+            layer.msg('请选择至少一条数据！', {icon: 2});
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "cell/cell_charge",
+            data: {ids: ids.toString()},
+            datatype: "json",
+            success: function () {
+                layer.msg('电池已进入充电区！', {icon: 1});
+                $(".layui-form-checked").not('.header').parents('tr').remove();
+            }
+        });
+        console.log(ids);
     }
 
-    function member_find() {
+    function cell_scrap(argument) {
+        var ids = [];
+        // 获取选中的id
+        $('tbody input').each(function (index, el) {
+            if ($(this).prop('checked')) {
+                ids.push($(this).val())
+            }
+        });
+        if (ids.length == 0) {
+            layer.msg('请选择至少一条数据！', {icon: 2});
+            return false;
+        }
+        layer.confirm('确认要报废电池吗？' + ids.toString(), function () {
+            $.ajax({
+                type: "POST",
+                url: "cell/cell_scrap",
+                data: {ids: ids.toString()},
+                datatype: "json",
+                success: function () {
+                    layer.msg('移除成功！', {icon: 1});
+                    $(".layui-form-checked").not('.header').parents('tr').remove();
+                }
+            });
+        });
+    }
+
+    function cell_find() {
         $.ajax({
             type: "POST",
             url: "member/listMemberByTell",
@@ -204,26 +263,24 @@
         });
     }
 
-    function delAll(argument) {
+    function cell_edit() {
         var ids = [];
-        // 获取选中的id 
+        // 获取选中的id
         $('tbody input').each(function (index, el) {
             if ($(this).prop('checked')) {
                 ids.push($(this).val())
             }
         });
-        layer.confirm('确认要删除吗？' + ids.toString(), function () {
-            $.ajax({
-                type: "POST",
-                url: "member/delMembers",
-                data: {ids: ids.toString()},
-                datatype: "json",
-                success: function () {
-                }
-            });
-            layer.msg('删除成功', {icon: 1});
-            $(".layui-form-checked").not('.header').parents('tr').remove();
-        });
+        if (ids.length == 0) {
+            layer.msg('请选择一条数据！', {icon: 2});
+            return false;
+        }
+        if (ids.length != 1) {
+            layer.msg('至多选择一条数据！', {icon: 2});
+            return false;
+        }
+        xadmin.open('编辑信息', 'cell-edit.html?id=' + ids[0], 600, 850)
     }
+
 </script>
 </html>

@@ -2,7 +2,6 @@ package com.ysy.doublec.Service;
 
 import com.ysy.doublec.Mapper.UserDao;
 import com.ysy.doublec.Pojo.User;
-import com.ysy.doublec.Utils.RedisTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

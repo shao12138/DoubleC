@@ -12,12 +12,44 @@
     <link rel="stylesheet" href="./css/xadmin.css">
     <script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="./js/xadmin.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+<script>
+    function GetPar(name) {				/* JS请求中的参数 */
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURIComponent(r[2]);
+        return null;
+    }
+
+    var targetName = "";
+    var cell_id = GetPar('id');
+    var id = "";
+    $(document).ready(
+        function () {
+            $.ajax({
+                type: "POST",
+                url: "/cell/getCell",
+                datatype: "json",
+                data: {id: cell_id},
+                success: function (data) {
+                    id = data['id'];
+                    targetName = data['targetName'];
+                    layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', "/uploads/" + data['targetName']);
+                    var ids = ['#L_name', '#L_kind', '#L_num', '#L_num_now', '#L_capacity', '#L_capacity_now', '#L_valtage', '#L_times', '#L_rent_time', '#L_date', '#L_price'];
+                    var val = ['name', 'kind', 'num', 'num_now', 'capacity', 'capacity_now', 'valtage', 'times', 'rent_time', 'date', 'price'];
+                    for (i = 0; i < ids.length; i++) {
+                        $(ids[i]).val(data[val[i]]);
+                    }
+                }
+            });
+        });
+</script>
 <body>
 <div class="layui-fluid">
     <div class="layui-row">
@@ -45,10 +77,25 @@
                 <div class="layui-form-mid layui-word-aux">10~1000</div>
             </div>
             <div class="layui-form-item">
+                <label for="L_num_now" class="layui-form-label">
+                    <span class="x-red">*</span>可用数量</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_num_now" name="num_now" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label for="L_capacity" class="layui-form-label">
                     <span class="x-red">*</span>电池容量</label>
                 <div class="layui-input-inline">
                     <input type="text" id="L_capacity" name="capacity" lay-verify="required|number"
+                           autocomplete="off" class="layui-input"></div>
+                <div class="layui-form-mid layui-word-aux">单位：AH</div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_capacity_now" class="layui-form-label">
+                    <span class="x-red">*</span>当前容量</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_capacity_now" name="capacity_now" lay-verify="required|number"
                            autocomplete="off" class="layui-input"></div>
                 <div class="layui-form-mid layui-word-aux">单位：AH</div>
             </div>
@@ -65,6 +112,14 @@
                     <span class="x-red">*</span>电池寿命</label>
                 <div class="layui-input-inline">
                     <input type="text" id="L_times" name="times" lay-verify="required|number"
+                           autocomplete="off" class="layui-input"></div>
+                <div class="layui-form-mid layui-word-aux">单位：次</div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_rent_time" class="layui-form-label">
+                    <span class="x-red">*</span>可用次数</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_rent_time" name="rent_time" lay-verify="required|number"
                            autocomplete="off" class="layui-input"></div>
                 <div class="layui-form-mid layui-word-aux">单位：次</div>
             </div>
@@ -98,7 +153,7 @@
             </div>
             <div class="layui-form-item">
                 <label class="layui-form-label"></label>
-                <button id="L_add" class="layui-btn" lay-filter="add" lay-submit="">添加</button>
+                <button class="layui-btn" lay-filter="edit" lay-submit="">修改</button>
             </div>
         </form>
     </div>
@@ -110,7 +165,6 @@
             var form = layui.form,
                 layer = layui.layer,
                 upload = layui.upload;
-            var targetName = "";
             upload.render({
                 elem: '#L_url',
                 url: '/cell/addCellPic',
@@ -125,36 +179,29 @@
                 }
             });
             //监听提交
-            form.on('submit(add)',
+            form.on('submit(edit)',
                 function (data) {
                     if (targetName == "") {
                         layer.alert("请上传图片!", {icon: 1});
                         return false;
                     }
                     data['field']['targetName'] = targetName;
+                    data['field']['id'] = id;
                     data = JSON.stringify(data['field']);
-                    console.log(data)
                     $.ajax({
                         type: "POST",
-                        url: "/cell/addCell",
-                        data: {memberInfo: data},
+                        url: "/cell/editCell",
+                        data: {cellInfo: data},
                         datatype: "json",
-                        success: function (key) {
-                            if (key == "success") {
-                                layer.alert("添加成功!", {icon: 1}, function () {
-                                    //关闭当前frame
-                                    xadmin.close();
-                                    // 可以对父窗口进行刷新
-                                    xadmin.father_reload();
-                                });
-                            } else {
-                                layer.alert("电池名重复!", {icon: 2});
-                            }
+                        success: function () {
+                            layer.alert("修改成功!", {icon: 1}, function () {
+                                xadmin.close();
+                                xadmin.father_reload();
+                            });
                         },
                     });
                     return false;
                 });
-
         });</script>
 </body>
 </html>

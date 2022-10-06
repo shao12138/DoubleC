@@ -35,6 +35,7 @@ public class CellService {
         String targetName = UUID.randomUUID().toString() + "." + extName;
         // 调用MultipartFile的transferTo()方法完成文件复制
         cellPic.getCover().transferTo(new File(path + targetName));
+        System.out.println(path + targetName);
         return targetName;
     }
 
@@ -60,12 +61,8 @@ public class CellService {
         return cellDao.getCell(id);
     }
 
-    public void cell_charge(String[] ids) {
-        cellDao.cell_charge(ids);
-    }
-
-    public void cell_scrap(String[] ids) {
-        cellDao.cell_scrap(ids);
+    public void cell_change(String[] ids,String position) {
+        cellDao.cell_change(ids,position);
     }
 
     public String editCell(Cell cell) {
@@ -75,5 +72,9 @@ public class CellService {
 
     public Cell findByCellName(String name) {
         return cellDao.findByCellName(name);
+    }
+
+    public void delCell(String id) {
+        cellDao.delCell(id);
     }
 }

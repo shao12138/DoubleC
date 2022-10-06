@@ -59,18 +59,11 @@ public class CellController {
         return cell;
     }
 
-    @RequestMapping("/cell_charge")
+    @RequestMapping("/cell_change")
     @ResponseBody
-    public void cell_charge(String ids) {
+    public void cell_change(String ids, String position) {
         String[] chargeIds = ids.split(",");
-        cellService.cell_charge(chargeIds);
-    }
-
-    @RequestMapping("/cell_scrap")
-    @ResponseBody
-    public void cell_scrap(String ids) {
-        String[] scrapIds = ids.split(",");
-        cellService.cell_scrap(scrapIds);
+        cellService.cell_change(chargeIds, position);
     }
 
     @RequestMapping("/editCell")
@@ -82,10 +75,16 @@ public class CellController {
         Cell cell = JSON.parseObject(cellInfo, Cell.class);
         return cellService.editCell(cell);
     }
+
     @RequestMapping("/listCellByName")
     @ResponseBody
     public Cell listCellByName(String name) {
         return cellService.findByCellName(name);
     }
 
+    @RequestMapping("/delCell")
+    @ResponseBody
+    public void delCell(String id) {
+        cellService.delCell(id);
+    }
 }

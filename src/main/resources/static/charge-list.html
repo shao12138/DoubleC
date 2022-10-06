@@ -56,7 +56,7 @@
                                 $('#cellList').empty();
                                 $.each(data, function (i, n) {
                                     id = data[i]['id']
-                                    $('#cellList').append("<tr><td>" + id + "</td><td>" + data[i]['name'] +
+                                    $('#cellList').append("<tr><td><input type='checkbox' lay-skin='primary' name='id' value=" + id + "></td><td>" + id + "</td><td>" + data[i]['name'] +
                                         "</td><td><img src='/uploads/" + data[i]['targetName'] + "'></td><td>" + data[i]['kind'] + "</td><td>" + data[i]['num'] + "</td><td>" + data[i]['times'] + "次</td><td>" + data[i]['rent_time'] + "次</td><td>" +
                                         data[i]['price'] + "</td><td>" + data[i]['capacity'] + "AH</td><td>" + data[i]['capacity_now'] +
                                         "AH</td><td>" + data[i]['valtage'] + "V</td><td>" + data[i]['date'] +
@@ -89,6 +89,10 @@
         <div class="layui-col-md12">
             <div class="layui-card">
                 <div class="layui-card-body ">
+                    <button class="layui-btn  layui-btn-normal" onclick="cell_store()"
+                            style="line-height:1.6em;margin-top:4px;margin-right:10px;float:right"><i
+                            class="layui-icon layui-icon-circle-dot" style="line-height:30px"></i>结束
+                    </button>
                     <div class="layui-inline layui-show-xs-block">
                         <input type="text" id="cell_find" name="name" placeholder="请输入电池名查询"
                                autocomplete="off"
@@ -103,6 +107,9 @@
                     <table class="layui-table layui-form">
                         <thead>
                         <tr>
+                            <th>
+                                <input type="checkbox" lay-filter="checkall" name="" lay-skin="primary">
+                            </th>
                             <th>ID</th>
                             <th>电池名</th>
                             <th>电池</th>
@@ -136,6 +143,16 @@
     layui.use(['laydate', 'form'], function () {
         var laydate = layui.laydate;
         var form = layui.form;
+        // 监听全选
+        form.on('checkbox(checkall)', function (data) {
+
+            if (data.elem.checked) {
+                $('tbody input').prop('checked', true);
+            } else {
+                $('tbody input').prop('checked', false);
+            }
+            form.render('checkbox');
+        });
         //执行一个laydate实例
         laydate.render({
             elem: '#start' //指定元素
@@ -145,6 +162,30 @@
             elem: '#end' //指定元素
         });
     });
+
+    function cell_store() {
+        var ids = [];
+        // 获取选中的id
+        $('tbody input').each(function (index, el) {
+            if ($(this).prop('checked')) {
+                ids.push($(this).val())
+            }
+        });
+        if (ids.length == 0) {
+            layer.msg('请选择至少一条数据！', {icon: 2});
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            url: "cell/cell_change",
+            data: {ids: ids.toString(),position:1},
+            datatype: "json",
+            success: function () {
+                layer.msg('电池已进入存储区！', {icon: 1});
+                $(".layui-form-checked").not('.header').parents('tr').remove();
+            }
+        });
+    }
 
     function cell_find() {
         $.ajax({

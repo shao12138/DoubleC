@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ysy.doublec.Mapper.CellDao">
-    <update id="cell_charge">
-        update cells set position = 2 where id in
+    <update id="cell_change">
+        update cells set position = #{position} where id in
         <foreach collection="ids" index="index" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>

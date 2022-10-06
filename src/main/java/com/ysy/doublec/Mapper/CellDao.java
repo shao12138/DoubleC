@@ -26,18 +26,14 @@ public interface CellDao {
     @Select("select * from cells where id=#{id}")
     Cell getCell(String id);
 
-    void cell_charge(@Param("ids") String[] ids);
-
-    void cell_scrap(@Param("ids") String[] ids);
+    void cell_change(@Param("ids") String[] ids,@Param("position")String position);
 
     @Update("update cells set name=#{name},kind=#{kind},num=#{num},num_now=#{num_now},price=#{price}," +
             "capacity=#{capacity},capacity_now=#{capacity_now},valtage=#{valtage},times=#{times},rent_time=#{rent_time}," +
             "targetName=#{targetName},date=#{date} where id=#{id}")
     void editCell(Cell cell);
 
-//
-//    void delMember(@Param("deleteIds") String[] deleteIds);
-//
-//    @Select("select * from members where tell=#{tell}")
-//    Member listMemberByTell(String tell);
+    @Delete("delete from cells where id=#{id}")
+    void delCell(@Param("id") String id);
+
 }

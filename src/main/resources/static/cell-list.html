@@ -191,18 +191,17 @@
         }
         $.ajax({
             type: "POST",
-            url: "cell/cell_charge",
-            data: {ids: ids.toString()},
+            url: "cell/cell_change",
+            data: {ids: ids.toString(),position:2},
             datatype: "json",
             success: function () {
                 layer.msg('电池已进入充电区！', {icon: 1});
                 $(".layui-form-checked").not('.header').parents('tr').remove();
             }
         });
-        console.log(ids);
     }
 
-    function cell_scrap(argument) {
+    function cell_scrap() {
         var ids = [];
         // 获取选中的id
         $('tbody input').each(function (index, el) {
@@ -217,8 +216,8 @@
         layer.confirm('确认要报废电池吗？' + ids.toString(), function () {
             $.ajax({
                 type: "POST",
-                url: "cell/cell_scrap",
-                data: {ids: ids.toString()},
+                url: "cell/cell_change",
+                data: {ids: ids.toString(),position:3},
                 datatype: "json",
                 success: function () {
                     layer.msg('移除成功！', {icon: 1});
